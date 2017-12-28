@@ -1,0 +1,94 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              12/28/2017 22:17:00 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "intrins.h"
+   3          
+   4          
+   5          /*************************************************************************
+   6          - Function    : 静态数码管实验
+   7          - Description : 8位数码管显示11111111 - FFFFFFFF
+   8          - Hardware    : 数码管 段选 -> P2.6  位选 -> P2.7
+   9          - Author      : Y.
+  10          - Date        : 2017.12
+  11           *************************************************************************/
+  12          
+  13          
+  14          /* 定义常用变量类型 */
+  15          typedef unsigned char u8;
+  16          typedef unsigned int u16;
+  17          
+  18          /* 定义全局变量 */
+  19          u8 code table[] = {0x3f,0x06,0x5b,0x4f,
+  20                             0x66,0x6d,0x7d,0x07,
+  21                             0x7f,0x6f,0x77,0x7c,
+  22                             0x39,0x5e,0x79,0x71};
+  23          u8 num;
+  24          
+  25          /* 位操作声明 */
+  26          sbit dula = P2^6;   //  控制段选
+  27          sbit wela = P2^7;   //  控制位选
+  28          
+  29          /* 声明子函数 */
+  30          void delay(u16);
+  31                             
+  32                             
+  33          /*************************************************************************
+  34           Function    : 主程序
+  35           Description : None 
+  36          **************************************************************************/                  
+  37          void main()
+  38          {
+  39   1          wela = 1;                             // 打开位选
+  40   1          P0 = 0x00;                            // 位选8个数码管
+  41   1          wela = 0;                             // 关闭位选
+  42   1      
+  43   1          while(1)
+  44   1          {
+  45   2              for(num=0;num<16;num++)
+  46   2              {
+  47   3                  dula = 1;                     // 打开段选
+  48   3                  P0 = table[num];              // 送入显示数据
+  49   3                  dula = 0;                     // 关闭段选
+  50   3                  delay(1000);                  // 延时
+  51   3              }
+  52   2          }
+  53   1        
+  54   1           
+  55   1      }
+C51 COMPILER V9.56.0.0   MAIN                                                              12/28/2017 22:17:00 PAGE 2   
+
+  56          
+  57          
+  58          /*************************************************************************
+  59           Function    : 延时子程序
+  60           Description : 延时 x 毫秒
+  61          **************************************************************************/
+  62          void delay(u16 xms)
+  63          {
+  64   1          u16 x,y;
+  65   1          for(x=xms;x>0;x--)
+  66   1          {
+  67   2              for(y=125;y>0;y--);
+  68   2          }
+  69   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     70    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

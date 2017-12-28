@@ -1,0 +1,128 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              12/28/2017 22:44:17 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "intrins.h"
+   3          
+   4          
+   5          /*************************************************************************
+   6          - Function    : 外部中断实验
+   7          - Description : 按下Key 中断指示灯LED亮 数码管停止变动 松开Key LED熄灭 数码管继续变动
+   8          - Hardware    : Key - P3.2  LED - P1.0
+   9          - Author      : Y.
+  10          - Date        : 2017.12
+  11           *************************************************************************/
+  12           
+  13           
+  14           /* 定义常用变量类型 */
+  15          typedef unsigned char u8;
+  16          typedef unsigned int u16;
+  17          
+  18          /* 定义全局变量 */
+  19          u8 code table[] = {0x3f,0x06,0x5b,0x4f,
+  20                             0x66,0x6d,0x7d,0x07,
+  21                             0x7f,0x6f,0x77,0x7c,
+  22                             0x39,0x5e,0x79,0x71};
+  23          u8 num;
+  24          
+  25          /* 位变量声明 */
+  26          sbit dula = P2^6;   // 控制段选
+  27          sbit wela = P2^7;   // 控制位选
+  28          sbit key = P3^2;    // 中断按钮
+  29          sbit led = P1^0;    // 中断状态指示灯                                    
+  30          
+  31          /* 声明子函数 */
+  32          void zhongduan0();
+  33          void display();                                                                  
+  34          void delay(u16);
+  35          
+  36                                             
+  37          /*************************************************************************
+  38           Function    : 主程序
+  39           Description : None 
+  40          **************************************************************************/
+  41          void main()
+  42          {
+  43   1              
+  44   1              EA = 1;             // 打开中断总开关
+  45   1          EX0 = 1;            // 打开外部中断0 - INT0
+  46   1          IT0 = 0;            // 设置INT0工作方式：0 低电平触发  1 下降沿触发
+  47   1                      
+  48   1              display();
+  49   1      
+  50   1           
+  51   1      }
+  52          
+  53          
+  54          /*************************************************************************
+  55           Function    : 数码管显示程序
+C51 COMPILER V9.56.0.0   MAIN                                                              12/28/2017 22:44:17 PAGE 2   
+
+  56           Description : 11111111 -> FFFFFFFF 快速变动
+  57          **************************************************************************/
+  58          void display()
+  59          {
+  60   1                wela = 1;
+  61   1                P0 = 0x00;
+  62   1                wela = 0;
+  63   1              
+  64   1                while(1)
+  65   1                      {
+  66   2                                for(num=0;num<16;num++)
+  67   2                                {
+  68   3                                                led = 1;
+  69   3                                              
+  70   3                                          dula = 1;
+  71   3                                                P0 = table[num];
+  72   3                                                dula = 0;
+  73   3                                                delay(100);
+  74   3                                      }
+  75   2                      }
+  76   1              
+  77   1      }
+  78          
+  79          
+  80          /*************************************************************************
+  81           Function    : 延时子程序
+  82           Description : 延时 x 毫秒
+  83          **************************************************************************/
+  84          void delay(u16 xms)
+  85          {
+  86   1          u16 x,y;
+  87   1                for(x=xms;x>0;x--)
+  88   1                {
+  89   2                          for(y=125;y>0;y--);
+  90   2                      }
+  91   1      }
+  92          
+  93          
+  94          /*************************************************************************
+  95           Function    : 中断函数
+  96           Description : NONE
+  97          **************************************************************************/
+  98          void zhongduan0() interrupt 0
+  99          {
+ 100   1          led = 0;                         // 中断状态指示
+ 101   1              key = 1;                    
+ 102   1              while(!key);                    // 按下按钮中断数码管变动  松开退出中断程序 数码管继续快速变动
+ 103   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     89    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
