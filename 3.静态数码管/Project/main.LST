@@ -1,9 +1,9 @@
-C51 COMPILER V9.56.0.0   MAIN                                                              12/28/2017 22:17:00 PAGE 1   
+C51 COMPILER V9.56.0.0   MAIN                                                              12/29/2017 20:10:23 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN main.OBJ
-COMPILER INVOKED BY: C:\Keil_C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+COMPILER INVOKED BY: C:\Keil_C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
 
 line level    source
 
@@ -37,32 +37,32 @@ line level    source
   28          
   29          /* 声明子函数 */
   30          void delay(u16);
-  31                             
-  32                             
+  31                                                                                   
+  32                                                                                   
   33          /*************************************************************************
   34           Function    : 主程序
   35           Description : None 
-  36          **************************************************************************/                  
+  36          **************************************************************************/                                                                      
   37          void main()
   38          {
-  39   1          wela = 1;                             // 打开位选
-  40   1          P0 = 0x00;                            // 位选8个数码管
-  41   1          wela = 0;                             // 关闭位选
+  39   1              wela = 1;                             // 打开位选
+  40   1              P0 = 0x00;                            // 位选8个数码管
+  41   1              wela = 0;                             // 关闭位选
   42   1      
-  43   1          while(1)
-  44   1          {
-  45   2              for(num=0;num<16;num++)
-  46   2              {
-  47   3                  dula = 1;                     // 打开段选
-  48   3                  P0 = table[num];              // 送入显示数据
-  49   3                  dula = 0;                     // 关闭段选
-  50   3                  delay(1000);                  // 延时
-  51   3              }
-  52   2          }
-  53   1        
+  43   1              while(1)
+  44   1              {
+  45   2                      for(num=0;num<16;num++)
+  46   2                      {
+  47   3                              dula = 1;                     // 打开段选
+  48   3                              P0 = table[num];              // 送入显示数据
+  49   3                              dula = 0;                     // 关闭段选
+  50   3                              delay(1000);                  // 延时
+  51   3                      }
+  52   2              }
+  53   1              
   54   1           
   55   1      }
-C51 COMPILER V9.56.0.0   MAIN                                                              12/28/2017 22:17:00 PAGE 2   
+C51 COMPILER V9.56.0.0   MAIN                                                              12/29/2017 20:10:23 PAGE 2   
 
   56          
   57          
@@ -73,10 +73,10 @@ line level    source
   62          void delay(u16 xms)
   63          {
   64   1          u16 x,y;
-  65   1          for(x=xms;x>0;x--)
-  66   1          {
-  67   2              for(y=125;y>0;y--);
-  68   2          }
+  65   1              for(x=xms;x>0;x--)
+  66   1              {
+  67   2                      for(y=125;y>0;y--);
+  68   2              }
   69   1      }
 
 

@@ -32,15 +32,15 @@ void delay(u16);
 **************************************************************************/
 void main()
 {
-	  while(1)
-		{
-		   target1();
-			 delay(300);
-       target2();
-			 delay(300);
-       target3();	
-       delay(300);			
-		}
+	while(1)
+	{
+		target1();
+		delay(300);
+		target2();
+		delay(300);
+		target3();	
+		delay(300);			
+	}
 }
 
 
@@ -50,11 +50,11 @@ void main()
 **************************************************************************/
 void delay(u16 xms)
 {
-    u16 x,y;
-	  for(x=xms;x>0;x--)
-	  {
-	      for(y=125;y>0;y--);
-  	}
+	u16 x,y;
+	for(x=xms;x>0;x--)
+	{
+		for(y=125;y>0;y--);
+	}
 }
 
 
@@ -64,15 +64,15 @@ void delay(u16 xms)
 **************************************************************************/
 void target1()
 {
-	  u8 i;
-    for(i=0;i<3;i++)
-		{
-		    P1 = 0xaa;
-			  delay(300);
-			  P1 = 0x55;
-			  delay(300);
-		}
-		P1 = 0xff;
+	u8 i;
+	for(i=0;i<3;i++)
+	{
+		P1 = 0xaa;
+		delay(300);
+		P1 = 0x55;
+		delay(300);
+	}
+	P1 = 0xff;
 }
 
 
@@ -82,33 +82,33 @@ void target1()
 **************************************************************************/
 void target2()
 {
-	  u8 i,j,temp,a,b,num;
-	  temp = 0xfe;
+	u8 i,j,temp,a,b,num;
+	temp = 0xfe;
 	
-    for(i=0;i<3;i++)
+	for(i=0;i<3;i++)
+	{
+		for(j=0;j<8;j++)
 		{
-			  for(j=0;j<8;j++)
-        {
-		        P1 = temp;
-            delay(300);
-            temp = _crol_(temp,1);             // 循环左移1位
-				}					
-		}
-		P1 = 0xff;
+		P1 = temp;
 		delay(300);
+		temp = _crol_(temp,1);             // 循环左移1位
+		}					
+	}
+	P1 = 0xff;
+	delay(300);
 		
 		
-		for(a=0;a<3;a++)
+	for(a=0;a<3;a++)
+	{
+		num = 0;
+		for(b=0;b<4;b++)
 		{
-			  num = 0;
-			  for(b=0;b<4;b++)
-				{
-		        P1 = tab[num];
-			      delay(300);
-		  	    num++;
-				}
+			P1 = tab[num];
+			delay(300);
+			num++;
 		}
-		P1 = 0xff;
+	}
+	P1 = 0xff;
 }
 
 
@@ -118,15 +118,15 @@ void target2()
 **************************************************************************/
 void target3()
 {
-	  u8 c;
-    for(c=0;c<3;c++)
-		{
-		    P1 = 0x00;
-			  delay(300);
-			  P1 = 0xff;
-			  delay(300);
-		}
+	u8 c;
+	for(c=0;c<3;c++)
+	{
+		P1 = 0x00;
+		delay(300);
+		P1 = 0xff;
+		delay(300);
+	}
 		
-		P1 = 0xff;                                  // 最后关闭所有LED
+	P1 = 0xff;                                  // 最后关闭所有LED
 }
 

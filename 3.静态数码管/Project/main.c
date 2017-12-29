@@ -36,20 +36,20 @@ void delay(u16);
 **************************************************************************/									 
 void main()
 {
-	  wela = 1;                             // 打开位选
-	  P0 = 0x00;                            // 位选8个数码管
-	  wela = 0;                             // 关闭位选
+	wela = 1;                             // 打开位选
+	P0 = 0x00;                            // 位选8个数码管
+	wela = 0;                             // 关闭位选
 
-	  while(1)
+	while(1)
+	{
+		for(num=0;num<16;num++)
 		{
-			  for(num=0;num<16;num++)
-			  {
-				    dula = 1;                     // 打开段选
-					  P0 = table[num];              // 送入显示数据
-					  dula = 0;                     // 关闭段选
-					  delay(1000);                  // 延时
-				}
+			dula = 1;                     // 打开段选
+			P0 = table[num];              // 送入显示数据
+			dula = 0;                     // 关闭段选
+			delay(1000);                  // 延时
 		}
+	}
 	
      
 }
@@ -62,8 +62,8 @@ void main()
 void delay(u16 xms)
 {
     u16 x,y;
-	  for(x=xms;x>0;x--)
-	  {
-		    for(y=125;y>0;y--);
-		}
+	for(x=xms;x>0;x--)
+	{
+		for(y=125;y>0;y--);
+	}
 }

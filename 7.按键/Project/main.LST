@@ -1,0 +1,111 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              12/29/2017 21:02:57 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          
+   3          
+   4          /*************************************************************************
+   5          - Function    : 按键实验
+   6          - Description : 按一下key1 数码管显示数字加1（0-F） 按键状态指示灯led1亮 
+   7          - Hardware    : key1 - P3.0  led1 - P1.0  位选 - P2.7  段选 - P2.6
+   8          - Author      : Y.
+   9          - Date        : 2017.12
+  10           *************************************************************************/
+  11          
+  12           /* 定义常用变量类型 */
+  13          #define u8 unsigned char
+  14          #define u16 unsigned int
+  15                  
+  16          /* 位变量声明 */
+  17          sbit led1 = P1^0;                                   // 按键状态指示灯
+  18          sbit key1 = P3^0;                                   // 按键1
+  19          sbit key2 = P3^1;
+  20          sbit key3 = P3^2;
+  21          sbit key4 = P3^3;
+  22          sbit dula = P2^6;                                   // 段选
+  23          sbit wela = P2^7;                                   // 位选
+  24          
+  25          /* 定义全局变量 */
+  26          u8 code table[] = {0x3f,0x06,0x5b,0x4f,             // 共阴数码管码表
+  27                             0x66,0x6d,0x7d,0x07,
+  28                             0x7f,0x6f,0x77,0x7c,
+  29                             0x39,0x5e,0x79,0x71};
+  30          u8 num;
+  31                                             
+  32          /* 子函数声明 */        
+  33          void delay(u16);
+  34          
+  35          
+  36          /*************************************************************************
+  37           Function    : 主程序
+  38           Description : None 
+  39          **************************************************************************/                                
+  40          void main()
+  41          {
+  42   1              led1 = 1;
+  43   1              wela = 1;
+  44   1              P0 = 0xfe;
+  45   1              wela = 0;
+  46   1              while(1)
+  47   1              {
+  48   2                      if(key1 == 0)
+  49   2                      {
+  50   3                              delay(10);                              // 按键消抖
+  51   3                              if(key1 == 0)
+  52   3                              {
+  53   4                                      led1 = 0;
+  54   4                                      num++;                              // 显示数据加1
+  55   4                                      if(num == 16)   
+C51 COMPILER V9.56.0.0   MAIN                                                              12/29/2017 21:02:57 PAGE 2   
+
+  56   4                                      {
+  57   5                                              num = 0;
+  58   5                                      }
+  59   4                              }
+  60   3                                                      
+  61   3                              while(!key1);                           // 检测是否松开按键
+  62   3                              delay(10);                               // 消抖
+  63   3                              while(!key1);
+  64   3                      }
+  65   2                      else led1 = 1;
+  66   2                                      
+  67   2                      dula = 1;
+  68   2                      P0 = table[num];                             // 送入显示数据
+  69   2                      dula = 0;
+  70   2                                      
+  71   2                      }
+  72   1      }
+  73          
+  74          
+  75          /*************************************************************************
+  76           Function    : 延时子程序
+  77           Description : 延时 x 毫秒(非精确延时)
+  78          **************************************************************************/
+  79          void delay(u16 xms)
+  80          {
+  81   1              u16 x,y;
+  82   1              for(x=xms;x>0;x--)
+  83   1              {
+  84   2                      for(y=125;y>0;y--);
+  85   2              }
+  86   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     95    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

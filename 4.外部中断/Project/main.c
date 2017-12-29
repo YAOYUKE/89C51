@@ -57,22 +57,22 @@ void main()
 **************************************************************************/
 void display()
 {
-	  wela = 1;
-	  P0 = 0x00;
-	  wela = 0;
+	wela = 1;
+	P0 = 0x00;
+	wela = 0;
 	
-	  while(1)
+	while(1)
+	{
+		for(num=0;num<16;num++)
 		{
-			  for(num=0;num<16;num++)
-			  {
-					  led = 1;
+			led = 1;
 					
-				    dula = 1;
-					  P0 = table[num];
-					  dula = 0;
-					  delay(100);
-				}
+			dula = 1;
+			P0 = table[num];
+			dula = 0;
+		delay(100);
 		}
+	}
 	
 }
 
@@ -83,11 +83,11 @@ void display()
 **************************************************************************/
 void delay(u16 xms)
 {
-    u16 x,y;
-	  for(x=xms;x>0;x--)
-	  {
-		    for(y=125;y>0;y--);
-		}
+	u16 x,y;
+	for(x=xms;x>0;x--)
+	{
+		for(y=125;y>0;y--);
+	}
 }
 
 
