@@ -1,0 +1,182 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              01/08/2018 20:26:42 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <intrins.h>
+   3          
+   4          
+   5          /*************************************************************************
+   6          - Function    : A/D转换实验  ADC0804
+   7          - Description : 数码管显示电位器数值
+   8          - Hardware    : CS - P3.5   WR - P3.6  RD - P3.7
+   9          - Author      : Y.
+  10          - Date        : 2017.12
+  11           *************************************************************************/
+  12           
+  13          
+  14          /* 定义常用变量类型 */
+  15          typedef unsigned char u8;
+  16          typedef unsigned int u16;
+  17          
+  18          
+  19          /* 申明位变量 */
+  20          sbit dula = P2^6;                                   // 申明U2锁存器锁存端 数码管段选
+  21          sbit wela = P2^7;                                   // 申明U3锁存器锁存端 数码管位选
+  22          sbit adcs = P3^5;                                   // ADC0804 片选信号输入端(低电平有效)
+  23          sbit adwr = P3^6;                                   // ADC0804 写信号
+  24          sbit adrd = P3^7;                                   // ADC0804 读信号
+  25          
+  26          
+  27          /* 申请全局变量 */
+  28          u8 code table[] = {0x3f,0x06,0x5b,0x4f,             // 共阴数码管 码表
+  29                             0x66,0x6d,0x7d,0x07,
+  30                             0x7f,0x6f,0x77,0x7c,
+  31                             0x39,0x5e,0x79,0x71};
+  32          
+  33          
+  34          /* 声明子函数 */                
+  35          void init();                                                                         // 初始化函数
+  36          void delay(u16);                                    // 延时函数
+  37          void display(u8,u8,u8);                             // 数码管显示函数
+  38          
+  39          /*************************************************************************
+  40           Function    : 主程序
+  41           Description : None
+  42          **************************************************************************/                                                      
+  43          void main()
+  44          {
+  45   1              init();
+  46   1              adcs = 0;                                     // 启动ADC0804
+  47   1              while(1)
+  48   1              {
+  49   2                      u8 adval,A1,A2,A3,a;  
+  50   2                      
+  51   2                      /* 写信号 完成一个低电平脉冲周期 */
+  52   2                      adwr = 1;
+  53   2                      _nop_();
+  54   2                      adwr = 0;                                 // 写信号 低电平启动转换
+  55   2                      _nop_();
+C51 COMPILER V9.56.0.0   MAIN                                                              01/08/2018 20:26:42 PAGE 2   
+
+  56   2                      adwr = 1;
+  57   2      
+  58   2                      for(a=10;a>0;a--)
+  59   2                      {
+  60   3                              display(A1,A2,A3);
+  61   3                      }
+  62   2      
+  63   2                      P1 = 0xFF;                                 // 初始化
+  64   2                      
+  65   2                      /* 读信号 完成一个低电平脉冲周期 */
+  66   2                      adrd = 1;
+  67   2                      _nop_();
+  68   2                      adrd = 0;                                  // 低电平有效
+  69   2                      _nop_();
+  70   2                      adval = P1;                                // 读信号 读取ADC转换后数值
+  71   2                      adrd = 1;
+  72   2                      
+  73   2                      /* 分离转换后数值个十百位 */
+  74   2                      A1 = adval/100;
+  75   2                      A2 = adval%100/10;
+  76   2                      A3 = adval%10;
+  77   2      
+  78   2              }
+  79   1      }
+  80          
+  81          
+  82          
+  83          /*************************************************************************
+  84           Function    : 初始化程序
+  85           Description : None
+  86          **************************************************************************/
+  87          void init()
+  88          {
+  89   1              dula = 1;
+  90   1              P0 = 0x00;                                     // 初始化 关闭所有段选
+  91   1              dula = 0;
+  92   1      
+  93   1              wela = 1;
+  94   1              P0 = 0x00;                                     // 初始化 位选8个数码管
+  95   1              wela = 0;
+  96   1              
+  97   1      }
+  98          
+  99          
+ 100          
+ 101          /*************************************************************************
+ 102           Function    : 延时子程序
+ 103           Description : 延时X毫秒ms
+ 104          **************************************************************************/
+ 105          void delay(u16 xms)
+ 106          {
+ 107   1              u16 x,y;
+ 108   1              for (x=xms;x>0;x--)
+ 109   1              {
+ 110   2                      for (y=125;y>0;y--);
+ 111   2              }
+ 112   1      }
+ 113          
+ 114          
+ 115          
+ 116          /*************************************************************************
+ 117           Function    : 显示函数
+C51 COMPILER V9.56.0.0   MAIN                                                              01/08/2018 20:26:42 PAGE 3   
+
+ 118           Description : None
+ 119          **************************************************************************/
+ 120          void display(u8 bai,u8 shi,u8 ge)
+ 121          {
+ 122   1              dula = 1;
+ 123   1              P0 = table[bai];
+ 124   1              dula = 0;
+ 125   1      
+ 126   1              wela = 1;
+ 127   1              P0 = 0xfe;
+ 128   1              wela = 0;
+ 129   1      
+ 130   1              delay(5);
+ 131   1              P0 = 0x00;
+ 132   1      
+ 133   1              dula = 1;
+ 134   1              P0 = table[shi];
+ 135   1              dula = 0;
+ 136   1      
+ 137   1              wela = 1;
+ 138   1              P0 = 0xfd;
+ 139   1              wela = 0;
+ 140   1      
+ 141   1              delay(5);
+ 142   1              P0 = 0x00;
+ 143   1               
+ 144   1              dula = 1;
+ 145   1              P0 = table[ge];
+ 146   1              dula = 0;
+ 147   1      
+ 148   1              wela = 1;
+ 149   1              P0 = 0xfb;
+ 150   1              wela = 0;
+ 151   1      
+ 152   1              delay(5);
+ 153   1              P0 = 0x00;
+ 154   1      }
+ 155          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    194    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
