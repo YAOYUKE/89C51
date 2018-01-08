@@ -1,0 +1,114 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              01/08/2018 17:27:07 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          
+   3          
+   4          /*************************************************************************
+   5          - Function    : D/A
+   6          - Description : DA控制二极管亮度:LED由灭变为最亮,在最暗和最亮时,蜂鸣器响一声
+   7          - Hardware    : WR - P3.6  CS - P3.2  蜂鸣器 - P1.0
+   8          - Author      : Y.
+   9          - Date        : 2017.12
+  10           *************************************************************************/
+  11           
+  12          
+  13          /* 定义常用变量类型 */
+  14          typedef unsigned char u8;
+  15          typedef unsigned int u16;
+  16          
+  17          /* 声明位变量 */
+  18          sbit dawr = P3^6;                            // 定义DA的WR端口
+  19          sbit dacs = P3^2;                            // 定义DA的CS端口
+  20          sbit beep = P1^0;                            // 蜂鸣器
+  21          
+  22          /* 变量 */
+  23          u8 val,flag;
+  24          
+  25          /* 声明子函数 */
+  26          void delay(u16);
+  27          
+  28          /*************************************************************************
+  29           Function    : 主程序
+  30           Description : None
+  31          **************************************************************************/                                                      
+  32          void main()
+  33          {
+  34   1              dawr = 0;                       // 打开寄存器输入端 D0 - D7 
+  35   1              dacs = 0;                       // 打开片选信号输入端
+  36   1              P2 = 0x00;                      // 初始化
+  37   1              flag = 0;
+  38   1              val = 0;
+  39   1              beep = 0;                       // 初始化蜂鸣器端口
+  40   1              
+  41   1              while(1)
+  42   1              {
+  43   2                      if(flag == 0)
+  44   2                      {
+  45   3                              val += 5;
+  46   3                              P2 = val;
+  47   3                              
+  48   3                              if(val == 255)
+  49   3                              {
+  50   4                                      beep = 1;
+  51   4                                      delay(1000);
+  52   4                                      beep = 0;
+  53   4                                      flag = 1;
+  54   4                              }
+  55   3                              delay(100);
+C51 COMPILER V9.56.0.0   MAIN                                                              01/08/2018 17:27:07 PAGE 2   
+
+  56   3                      }
+  57   2      
+  58   2                      else
+  59   2                      {
+  60   3                              val -= 5;
+  61   3                              P2 = val;
+  62   3                              
+  63   3                              if(val == 0)
+  64   3                              {
+  65   4                                      beep = 1;
+  66   4                                      delay(1000);
+  67   4                                      beep = 0;
+  68   4                                      flag = 0;
+  69   4                              }
+  70   3                              delay(100);
+  71   3                      }
+  72   2      
+  73   2              }
+  74   1      
+  75   1      } 
+  76          
+  77          
+  78          /*************************************************************************
+  79           Function    : 延时子程序
+  80           Description : 延时X毫秒ms
+  81          **************************************************************************/
+  82          void delay(u16 xms)
+  83          {
+  84   1                u16 x,y;
+  85   1          for(x=xms;x>0;x--)
+  86   1                      {
+  87   2                          for(y=125;y>0;y--);
+  88   2                      }
+  89   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    112    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
