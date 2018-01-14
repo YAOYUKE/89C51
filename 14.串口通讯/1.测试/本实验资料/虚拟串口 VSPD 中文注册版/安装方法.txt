@@ -1,0 +1,1 @@
+安装好英文版后先不要运行，把“补丁”文件夹里的文件覆盖到软件的安装目录C:\Program Files\Eltima Software\Virtual Serial Port Driver，即为中文注册版。
